@@ -1,19 +1,24 @@
 FROM mateuschmitz/php-phalcon:base
 MAINTAINER Mateus Schmitz <matteuschmitz@gmail.com>
 
+# PHP Repository
+RUN echo "deb https://packages.sury.org/php/ jessie main" > /etc/apt/sources.list.d/php.list
+RUN apt-get update
+
 # install Apache, PHP e Phalcon 
-RUN apt-get install -y \
+RUN apt-get install -y --force-yes \
     locate \
     apache2 \
-    php7.0 \
-    php7.0-mysql \
-    php7.0-mcrypt \
-    php7.0-curl \
-    php7.0-dom \
-    php7.0-phalcon
+    php7.2 \
+    php7.2-mysql \
+    php7.2-curl \
+    php7.2-dom \
+    php7.2-phalcon
+
 
 RUN service apache2 stop
 RUN a2enmod rewrite
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
 # PHP ini
 ADD data/php.ini /etc/php/7.0/apache2/php.ini
